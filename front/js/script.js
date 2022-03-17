@@ -7,6 +7,7 @@ fetch("http://localhost:3000/api/products")
     }
   })
   .then(function(value) {
+    console.log(value);
     displayProducts(value);
   })
   .catch(function(err) {
@@ -28,5 +29,4 @@ fetch("http://localhost:3000/api/products")
           </a>
           `;
     }
-  }
-  
+  };
