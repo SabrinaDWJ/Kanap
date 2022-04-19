@@ -44,11 +44,38 @@ let button = document.querySelector('#addToCart'),
 
 // Ecouter le bouton et envoyer le panier
 button.addEventListener('click', () => {
+   
+    let cleanMessages = () => {
+        
+        let errorAMessage = document.querySelector('.cartMessage');
+        if(errorAMessage){
+            errorAMessage.remove();
+        }
+        
 
-    //  
+        let errorBMessage = document.querySelector('.cartMessage2');
+        if(errorBMessage){
+            errorBMessage.remove();
+        }
+
+        let errorCMessage = document.querySelector('cartMessage3');
+        if(errorCMessage){
+            errorCMessage.remove();
+        }
+
+        let successAMessage = document.querySelector('.successMessage');
+        if(successAMessage){
+            successAMessage.remove();
+        }
+    };
+    
+    cleanMessages();
+
     if (!isValid())
         return showErrorMessages();
 
+    
+        
     let cart = JSON.parse(localStorage.getItem("cart"));
 
     if (!cart)
@@ -64,19 +91,24 @@ button.addEventListener('click', () => {
         })
     } else {
         productSimilaire.quantity += Number(quantity.value);
-
+        console.log(productSimilaire);
         for (let product of cart) {
-            if (product._id == productSimilaire.id && product.color == productSimilaire.color) {
-                   product.quantity = productSimilaire.quantity
+            // si on trouve un produit idtq on met a jour la qté
+            console.log(productSimilaire);
+            if (product._id == productSimilaire._id && product.color == productSimilaire.color) {
+                   product.quantity = productSimilaire.quantity;
+                console.log(product);
+                   
             }
         }
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
 
-    showSuccessMessage();
-})
+    showSuccessMessage();  
 
+})
+ 
 // Functions
 
 function isValid() {
@@ -134,7 +166,13 @@ function showErrorMessages() {
 
     let similare_product = getSimilareProductInCart(productId, colors.value);
     if (similare_product && Number(similare_product.quantity) + Number(quantity.value) > 100) {
-        alert("Vous avez déjà un article similaire dans votre panier dont le total dépasse 100")
+        let errorMessage3 = document.createElement("span");
+        errorMessage3.classList.add("cartMessage3");
+        document.querySelector(".item__content").appendChild(errorMessage3);
+        errorMessage3.innerHTML = "Vous avez déjà un article similaire dans votre panier dont le total dépasse 100!";
+        errorMessage3.style.color = "red";
+        errorMessage3.style.textAlign = "center";
+        errorMessage3.style.padding = "15px";
         console.log("Vous avez déjà un article similaire dans votre panier dont le total dépasse 100")
     }
 }
@@ -143,9 +181,11 @@ function showSuccessMessage() {
     // Afficher en vert "Produit ajouté avec succès !"
     let successMessage = document.createElement("div");
     successMessage.classList.add("successMessage");
-    document.querySelector(".item__content__addButton").appendChild(successMessage);
+    document.querySelector(".item__content").append(successMessage);
     successMessage.innerHTML = "Produit ajouté avec succès!";
     successMessage.style.color = "green";
+    successMessage.style.textAlign = "center";
+    successMessage.style.padding = "15px";
     console.log("Produit ajouté avec succès !");
 }
 
