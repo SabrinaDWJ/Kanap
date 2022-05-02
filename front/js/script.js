@@ -24,7 +24,5 @@ function displayProducts(arr) {
             </article>
           </a>
           `;
-
   }
-
 };
