@@ -92,12 +92,12 @@ function addBasket(product) {
             cart.push({
                 _id: productId,
                 color: colors.value,
-                quantity: Number(quantity.value),
                 altTxt: product.altTxt,
                 name: product.name,
                 price: product.price,
                 description: product.description,
                 imageUrl: product.imageUrl,
+                quantity: Number(quantity.value),
             })
 
         } else {
