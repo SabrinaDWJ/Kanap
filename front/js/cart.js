@@ -56,8 +56,8 @@ function displayCart() {
         }
 
         let deleteButton = document.getElementsByClassName("deleteItem");
-        for(let button of deleteButton){
-            button.addEventListener("click", function(e){
+        for (let button of deleteButton) {
+            button.addEventListener("click", function (e) {
                 let path = e.path || e.composedPath();
                 let article = path.find(x => x.tagName.toLowerCase() == "article");
                 let id = article.getAttribute("data-id");
@@ -77,8 +77,8 @@ function displayCart() {
         }
 
         let quantityInput = document.getElementsByClassName("itemQuantity");
-        for(let input of quantityInput){
-            input.addEventListener("change", function(e){
+        for (let input of quantityInput) {
+            input.addEventListener("change", function (e) {
                 let path = e.path || e.composedPath();
                 let article = path.find(x => x.tagName.toLowerCase() == "article");
                 let id = article.getAttribute("data-id");
@@ -100,7 +100,6 @@ function displayCart() {
 
 displayCart();
 
-// Gérer la modification et la suppression de Produits dans la page Panier
 // Récupération du total des quantités et récupération du prix total
 
 function totals() {
@@ -122,69 +121,6 @@ function totals() {
 
 }
 totals();
-
-// Suppression d'un produit
-/*function deleteProduct() {
-
-    let buttonDelete = document.querySelectorAll('.deleteItem');
-
-    for (let button of buttonDelete) {
-        button.addEventListener("click", function (e) {
-            let article = e.path.find(el => el.tagName.toLowerCase() == "article");
-            let product_id = article.getAttribute("data-id");
-            let product_color = article.getAttribute("data-color");
-
-            let cart = JSON.parse(localStorage.getItem("cart"));
-            for (let i = 0; i < cart.length; i++) {
-                if (cart[i]._id == product_id && cart[i].color == product_color) {
-                    cart.splice(i, 1);
-                    i--;
-                }
-            }
-            localStorage.setItem("cart", JSON.stringify(cart))
-
-        })
-    }
-};
-deleteProduct();*/
-
-
-// Modification d'une quantité de produit
-/*function modifyQuantity() {
-
-    let qttModif = document.querySelectorAll(".itemQuantity");
-
-    for (let j = 0; j < qttModif.length; j++) {
-        qttModif[j].addEventListener("change", (event) => {
-            event.preventDefault();
-
-            //Selection de l'element à modifier 
-            let quantityModif = productLocalStorage[j].quantity;
-            let qttModifValue = qttModif[j].valueAsNumber;
-
-            if (qttModifValue > 0 && qttModifValue < 100) {
-                const resultFind = productLocalStorage.find((el) => el.qttModifValue !== quantityModif);
-
-                resultFind.quantity = qttModifValue;
-                productLocalStorage[j].quantity = resultFind.quantity;
-
-                localStorage.setItem("cart", JSON.stringify(productLocalStorage));
-
-                totals()
-            } else {
-
-                let messageQuantity = document.createElement("span");
-                messageQuantity.classList.add("messageQuantity");
-                document.querySelector(".cart__item__content__settings__quantity").append(messageQuantity);
-                messageQuantity.innerHTML = "Selectionnéz une quantité comprise entre 1 et 100!";
-                messageQuantity.style.color = "white";
-                messageQuantity.style.fontSize = "13px"
-                console.log("Veuillez selectionner une quantité comprise entre 1 et 100!");
-            }
-        })
-    }
-}
-modifyQuantity()*/
 
 // Formulaire
 
@@ -332,7 +268,7 @@ function sendOrder() {
                 products: idProducts,
             };
 
-            let options = fetch("http://localhost:3000/api/products/order",{
+            let options = fetch("http://localhost:3000/api/products/order", {
                 method: 'POST',
                 body: JSON.stringify(order),
                 headers: {
@@ -340,7 +276,7 @@ function sendOrder() {
                     "Content-Type": "application/json"
                 },
             });
-                options.then((response) => response.json())
+            options.then((response) => response.json())
                 .then((data) => {
                     console.log(data);
                     localStorage.clear();

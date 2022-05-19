@@ -39,7 +39,7 @@ function viewProduct(product) {
 };
 
 function addBasket(product) {
-    
+
     // Sélection du bouton Ajouter l'article au panier
     let button = document.querySelector('#addToCart'),
         colors = document.getElementById("colors"),
@@ -71,7 +71,7 @@ function addBasket(product) {
                 successAMessage.remove();
             }
 
-            
+
         };
 
         cleanMessages();
@@ -90,16 +90,16 @@ function addBasket(product) {
         if (productSimilaire == null) {
 
             cart.push({
-                _id: productId,
                 color: colors.value,
-                altTxt: product.altTxt,
+                _id: productId,
                 name: product.name,
                 price: product.price,
-                description: product.description,
                 imageUrl: product.imageUrl,
-                quantity: Number(quantity.value),
+                description: product.description,
+                altTxt: product.altTxt,
+                quantity: Number(quantity.value)
             })
-
+            
         } else {
             productSimilaire.quantity += Number(quantity.value);
             console.log(productSimilaire);
