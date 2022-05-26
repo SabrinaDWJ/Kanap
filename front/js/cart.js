@@ -1,4 +1,4 @@
-// 
+
 let productLocalStorage = JSON.parse(localStorage.getItem("cart"));
 console.log(productLocalStorage);
 
@@ -6,7 +6,16 @@ console.log(productLocalStorage);
 let cartItems = document.getElementById("cart__items");
 console.log(cartItems);
 
-function displayCart() {
+fetch("http://localhost:3000/api/products")
+    .then(function (res) {
+        return res.json();
+    })
+    .then(displayProducts)
+    .catch(function (err) {
+        console.error(err);
+    })
+
+function displayCart(products_from_api) {
 
     // Si le panier est vide: afficher "Le panier est vide"
     if (!productLocalStorage || productLocalStorage == 0) {
@@ -98,7 +107,7 @@ function displayCart() {
     }
 }
 
-displayCart();
+
 
 // Récupération du total des quantités et récupération du prix total
 
@@ -117,7 +126,7 @@ function totals() {
     document.querySelector('#totalQuantity').innerHTML = total_quantity;
     console.log(total_quantity)
     document.querySelector('#totalPrice').innerHTML = total_price;
-    
+
 
 }
 totals();
