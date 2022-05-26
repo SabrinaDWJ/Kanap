@@ -117,7 +117,7 @@ function totals() {
     document.querySelector('#totalQuantity').innerHTML = total_quantity;
     console.log(total_quantity)
     document.querySelector('#totalPrice').innerHTML = total_price;
-    console.log(total_price)
+    
 
 }
 totals();

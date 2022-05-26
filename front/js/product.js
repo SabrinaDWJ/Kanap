@@ -92,11 +92,6 @@ function addBasket(product) {
             cart.push({
                 color: colors.value,
                 _id: productId,
-                name: product.name,
-                price: product.price,
-                imageUrl: product.imageUrl,
-                description: product.description,
-                altTxt: product.altTxt,
                 quantity: Number(quantity.value)
             })
             
