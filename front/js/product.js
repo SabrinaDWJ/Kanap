@@ -38,7 +38,7 @@ function viewProduct(product) {
     addBasket(product)
 };
 
-function addBasket(product) {
+function addBasket() {
 
     // Sélection du bouton Ajouter l'article au panier
     let button = document.querySelector('#addToCart'),
@@ -50,27 +50,15 @@ function addBasket(product) {
 
         let cleanMessages = () => {
 
-            let errorAMessage = document.querySelector('.cartMessage');
-            if (errorAMessage) {
-                errorAMessage.remove();
-            }
-
-
-            let errorBMessage = document.querySelector('.cartMessage2');
-            if (errorBMessage) {
-                errorBMessage.remove();
-            }
-
-            let errorCMessage = document.querySelector('cartMessage3');
-            if (errorCMessage) {
-                errorCMessage.remove();
+            let errors = document.getElementsByClassName("errorMessage");
+            if (errors) {
+                Array.from(errors).forEach(err => err.remove());
             }
 
             let successAMessage = document.querySelector('.successMessage');
             if (successAMessage) {
                 successAMessage.remove();
             }
-
 
         };
 
@@ -94,7 +82,7 @@ function addBasket(product) {
                 _id: productId,
                 quantity: Number(quantity.value)
             })
-            
+
         } else {
             productSimilaire.quantity += Number(quantity.value);
             console.log(productSimilaire);
@@ -152,40 +140,26 @@ function getSimilareProductInCart(id, color) {
 function showErrorMessages() {
 
     if (colors.value == "") {
-        // Afficher en dessous du select en rouge "Choisissez une couleur svp"
-        let errorMessage = document.createElement("span");
-        errorMessage.classList.add("cartMessage");
-        document.querySelector(".item__content__settings__color").appendChild(errorMessage);
-        errorMessage.innerHTML = "Choisissez une couleur svp!";
-        errorMessage.style.color = "red";
-        console.log("Choisissez une couleur svp");
+
+        createError("Choisissez une couleur svp")
+        console.log("Choisissez une couleur svp")
     }
 
     if (quantity.value > 100 || quantity.value < 1) {
-        // Afficher en dessous de l'input en rouge "Choisissez une quantité entre 1 et 100"
-        let errorMessage2 = document.createElement("span");
-        errorMessage2.classList.add("cartMessage2");
-        document.querySelector(".item__content__settings__quantity").appendChild(errorMessage2);
-        errorMessage2.innerHTML = "Choisissez une quantité entre 1 et 100!";
-        errorMessage2.style.color = "red";
-        console.log("Choisissez une quantité entre 1 et 100");
+
+        createError("Choisissez une quantité entre 1 et 100")
+        console.log("Choisissez une quantité entre 1 et 100")
     }
 
     let similare_product = getSimilareProductInCart(productId, colors.value);
     if (similare_product && Number(similare_product.quantity) + Number(quantity.value) > 100) {
-        let errorMessage3 = document.createElement("span");
-        errorMessage3.classList.add("cartMessage3");
-        document.querySelector(".item__content").appendChild(errorMessage3);
-        errorMessage3.innerHTML = "Vous avez déjà un article similaire dans votre panier dont le total dépasse 100!";
-        errorMessage3.style.color = "red";
-        errorMessage3.style.textAlign = "center";
-        errorMessage3.style.padding = "15px";
+
+        createError("Vous avez déjà un article similaire dans votre panier dont le total dépasse 100!")
         console.log("Vous avez déjà un article similaire dans votre panier dont le total dépasse 100")
     }
 }
 
 function showSuccessMessage() {
-    // Afficher en vert "Produit ajouté avec succès !"
     let successMessage = document.createElement("div");
     successMessage.classList.add("successMessage");
     document.querySelector(".item__content").appendChild(successMessage);
@@ -196,8 +170,15 @@ function showSuccessMessage() {
     console.log("Produit ajouté avec succès !");
 }
 
-
-
+function createError(msg) {
+    let errorMessage = document.createElement("span");
+    errorMessage.classList.add("errorMessage");
+    document.querySelector(".item__content").appendChild(errorMessage);
+    errorMessage.innerHTML = msg;
+    errorMessage.style.color = "red";
+    errorMessage.style.textAlign = "center";
+    errorMessage.style.padding = "15px";
+}
 
 
 

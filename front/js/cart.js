@@ -10,7 +10,7 @@ fetch("http://localhost:3000/api/products")
     .then(function (res) {
         return res.json();
     })
-    .then(displayProducts)
+    .then(displayCart)
     .catch(function (err) {
         console.error(err);
     })
@@ -36,20 +36,20 @@ function displayCart(products_from_api) {
         console.log("je ne suis pas vide!")
 
         for (let product of productLocalStorage) {
-
+            let api_product = products_from_api.find(x => x._id == product._id);
             console.log(product)
 
             cartItems.innerHTML += `
 
             <article class="cart__item" data-id="${product._id}" data-color="${product.color}">
                 <div class="cart__item__img">
-                    <img src="${product.imageUrl}" alt="${product.altTxt}">
+                    <img src="${api_product.imageUrl}" alt="${api_product.altTxt}">
                 </div>
                 <div class="cart__item__content">
                     <div class="cart__item__content__description">
-                        <h2>${product.name}</h2>
+                        <h2>${api_product.name}</h2>
                         <p>${product.color}</p>
-                        <p>${product.price} €</p>
+                        <p>${api_product.price} €</p>
                     </div>
                     <div class="cart__item__content__settings">
                         <div class="cart__item__content__settings__quantity">
@@ -63,7 +63,7 @@ function displayCart(products_from_api) {
                 </div>
             </article>`;
         }
-
+        totals(products_from_api);
         let deleteButton = document.getElementsByClassName("deleteItem");
         for (let button of deleteButton) {
             button.addEventListener("click", function (e) {
@@ -81,7 +81,7 @@ function displayCart(products_from_api) {
                 }
                 localStorage.setItem("cart", JSON.stringify(cart));
                 article.remove();
-                totals()
+                totals(products_from_api)
             });
         }
 
@@ -100,18 +100,16 @@ function displayCart(products_from_api) {
                     }
                 }
                 localStorage.setItem("cart", JSON.stringify(cart));
-                totals()
+                totals(products_from_api)
             });
         }
 
     }
 }
 
-
-
 // Récupération du total des quantités et récupération du prix total
 
-function totals() {
+function totals(products_from_api) {
 
     let total_quantity = 0,
         total_price = 0;
@@ -119,17 +117,16 @@ function totals() {
     let cart = JSON.parse(localStorage.getItem("cart"));
 
     for (let product of cart) {
+        let api_product = products_from_api.find(x => x._id == product._id);
         total_quantity += Number(product.quantity);
-        total_price += Number(product.price) * Number(product.quantity);
+        total_price += Number(api_product.price) * Number(product.quantity);
     }
 
     document.querySelector('#totalQuantity').innerHTML = total_quantity;
     console.log(total_quantity)
     document.querySelector('#totalPrice').innerHTML = total_price;
 
-
-}
-totals();
+};
 
 // Formulaire
 
@@ -140,72 +137,71 @@ function getForm() {
 
     //Création des expressions régulières
     let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$');
-    let NomPrenomVilleRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
+    let charRegExp = new RegExp("^[a-zA-Z ,.'-]+$");
     let addressRegExp = new RegExp("^[0-9]{1,3}(?:(?:[,. ]){1}[-a-zA-Zàâäéèêëïîôöùûüç]+)+");
 
-    // Ecoute de la modification du prénom
-    form.firstName.addEventListener('change', function () {
+     // Ecoute de la modification du prénom
+     form.firstName.addEventListener('change', function() {
         validFirstName(this);
     });
 
-    // Ecoute de la modification du prénom
-    form.lastName.addEventListener('change', function () {
+    // Ecoute de la modification du nom
+    form.lastName.addEventListener('change', function() {
         validLastName(this);
     });
 
-    // Ecoute de la modification du prénom
-    form.address.addEventListener('change', function () {
+    // Ecoute de la modification de l'adresse
+    form.address.addEventListener('change', function() {
         validAddress(this);
     });
 
-    // Ecoute de la modification du prénom
-    form.city.addEventListener('change', function () {
+    // Ecoute de la modification de la ville
+    form.city.addEventListener('change', function() {
         validCity(this);
     });
 
-    // Ecoute de la modification du prénom
-    form.email.addEventListener('change', function () {
+    // Ecoute de la modification de l'email
+    form.email.addEventListener('change', function() {
         validEmail(this);
     });
 
     //validation du prénom
-    const validFirstName = function (inputFirstName) {
+    const validFirstName = function(inputFirstName) {
         let firstNameErrorMsg = inputFirstName.nextElementSibling;
 
-        if (NomPrenomVilleRegExp.test(inputFirstName.value)) {
+        if (charRegExp.test(inputFirstName.value)) {
             firstNameErrorMsg.innerHTML = '';
         } else {
-            firstNameErrorMsg.innerHTML = 'Veuillez renseigner votre prenom.';
+            firstNameErrorMsg.innerHTML = 'Veuillez renseigner le prenom.';
         }
     };
 
     //validation du nom
-    const validLastName = function (inputLastName) {
+    const validLastName = function(inputLastName) {
         let lastNameErrorMsg = inputLastName.nextElementSibling;
 
-        if (NomPrenomVilleRegExp.test(inputLastName.value)) {
+        if (charRegExp.test(inputLastName.value)) {
             lastNameErrorMsg.innerHTML = '';
         } else {
-            lastNameErrorMsg.innerHTML = 'Veuillez renseigner votre nom.';
+            lastNameErrorMsg.innerHTML = 'Veuillez renseigner le nom.';
         }
     };
-
     //validation de l'adresse
-    const validAddress = function (inputAddress) {
+    const validAddress = function(inputAddress) {
         let addressErrorMsg = inputAddress.nextElementSibling;
 
         if (addressRegExp.test(inputAddress.value)) {
             addressErrorMsg.innerHTML = '';
         } else {
-            addressErrorMsg.innerHTML = 'Veuillez renseigner votre adresse.';
+            addressErrorMsg.innerHTML = 'Veuillez renseigner l\'adresse.';
         }
     };
 
     //validation de la ville
-    const validCity = function (inputCity) {
+    const validCity = function(inputCity) {
         let cityErrorMsg = inputCity.nextElementSibling;
 
-        if (NomPrenomVilleRegExp.test(inputCity.value)) {
+        if (charRegExp.test(inputCity.value)) {
             cityErrorMsg.innerHTML = '';
         } else {
             cityErrorMsg.innerHTML = 'Veuillez renseigner la ville.';
@@ -213,7 +209,7 @@ function getForm() {
     };
 
     //validation de l'email
-    const validEmail = function (inputEmail) {
+    const validEmail = function(inputEmail) {
         let emailErrorMsg = inputEmail.nextElementSibling;
 
         if (emailRegExp.test(inputEmail.value)) {
@@ -227,6 +223,7 @@ getForm();
 
 function sendOrder() {
     let btn_commander = document.getElementById("order");
+    
 
     //Ecouter le panier
     btn_commander.addEventListener("click", (e) => {
@@ -239,14 +236,7 @@ function sendOrder() {
         let inputCity = document.getElementById('city');
         let inputMail = document.getElementById('email');
 
-        // Récupération des valeurs du formulaire client
-        let inputNameValue = inputName.value;
-        let inputLastNameValue = inputLastName.value;
-        let inputAdressValue = inputAdress.value;
-        let inputCityValue = inputCity.value;
-        let inputMailValue = inputMail.value;
-
-        if (inputNameValue == 0 || inputLastNameValue == 0 || inputAdressValue == 0 || inputCityValue == 0 || inputMailValue == 0) {
+        if (inputName.value == 0 || inputLastName.value == 0 || inputAdress.value == 0 || inputCity.value == 0 || inputMail.value == 0) {
             let messageInfo = document.createElement("span");
             messageInfo.classList.add("messageInfo");
             document.querySelector(".cart").append(messageInfo);
@@ -299,4 +289,4 @@ function sendOrder() {
     })
 }
 
-sendOrder();
+sendOrder()
