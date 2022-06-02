@@ -50,9 +50,9 @@ function addBasket() {
 
         let cleanMessages = () => {
 
-            let errors = document.getElementsByClassName("errorMessage");
+            let errors = document.querySelectorAll(".errorMessage");
             if (errors) {
-                Array.from(errors).forEach(err => err.remove());
+               errors.forEach(err => err.remove());
             }
 
             let successAMessage = document.querySelector('.successMessage');
