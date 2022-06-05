@@ -29,13 +29,15 @@ function viewProduct(product) {
 
     // Options de couleur
     // La variable productColors insere les options de couleurs dans le HTML (DOM)
+    let colors_select = document.querySelector("#colors");
     for (let colors of product.colors) {
         let productColors = document.createElement("option");
+        colors_select.appendChild(productColors);
         document.querySelector("#colors").appendChild(productColors);
         productColors.value = colors;
         productColors.innerHTML = colors;
     }
-    addBasket(product)
+    addBasket()
 };
 
 function addBasket() {
@@ -44,9 +46,6 @@ function addBasket() {
     let button = document.querySelector('#addToCart'),
         colors = document.getElementById("colors"),
         quantity = document.getElementById("quantity");
-
-    // Ecouter le bouton et envoyer le panier
-    button.addEventListener('click', () => {
 
         let cleanMessages = () => {
 
@@ -63,11 +62,12 @@ function addBasket() {
         };
 
         cleanMessages();
+    // Ecouter le bouton et envoyer le panier
+    button.addEventListener('click', () => {
+
 
         if (!isValid())
             return showErrorMessages();
-
-
 
         let cart = JSON.parse(localStorage.getItem("cart"));
 
@@ -103,10 +103,12 @@ function addBasket() {
 
     })
 }
-addBasket()
+
 // Functions
 
 function isValid() {
+    let colors = document.getElementById("colors");
+    
     if (colors.value == "")
         return false;
     if (quantity.value > 100 || quantity.value < 1)
