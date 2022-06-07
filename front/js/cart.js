@@ -89,7 +89,7 @@ function totals(products_from_api) {
 
 // Formulaire
 //Instauration formulaire avec regex
-function getForm() {
+function sendOrder() {
     // Ajout des Regex
     let form = document.querySelector(".cart__order__form");
 
@@ -176,10 +176,6 @@ function getForm() {
             emailErrorMsg.innerHTML = 'Veuillez renseigner votre email.';
         }
     };
-}
-getForm();
-
-function sendOrder() {
 
     let btn_commander = document.getElementById("order");
 
@@ -187,13 +183,31 @@ function sendOrder() {
     btn_commander.addEventListener("click", (e) => {
         e.preventDefault();
 
-        if (firstName.value == 0 || lastName.value.length == 0 || address.value == 0 || city.value == 0 || email.value == 0) {
+        cleanFormMessages();
+
+        //Récupération des coordonnées du formulaire client
+        let inputFirstName = document.getElementById('firstName');
+        let inputLastName = document.getElementById('lastName');
+        let inputAddress = document.getElementById('address');
+        let inputCity = document.getElementById('city');
+        let inputEmail = document.getElementById('email');
+
+        if (firstName.value == 0 || lastName.value == 0 || address.value == 0 || city.value == 0 || email.value == 0) {
 
             createErrorForm("Veuillez bien remplir le formulaire!")
             console.log("Veuillez bien remplir le formulaire!")
-            return;
+            return
         }
-       
+        if (charRegExp.test(inputFirstName.value) == false ||
+            charRegExp.test(inputLastName.value) == false || 
+            addressRegExp.test(inputAddress.value) == false || 
+            charRegExp.test(inputCity.value) == false || 
+            emailRegExp.test(inputEmail.value) == false) {
+            createErrorForm("Veuillez bien remplir le formulaire!")
+            console.log("Veuillez bien remplir le formulaire!")
+            return
+        }
+
         let idProducts = productLocalStorage.map(product => product._id);
         console.log(idProducts);
         let order = {
@@ -224,6 +238,7 @@ function sendOrder() {
             .catch((err) => {
                 alert("Problème avec fetch : " + err.message);
             });
+
     })
 
 }
@@ -253,6 +268,14 @@ function createErrorBasket(msg) {
     messagePanier.style.display = "flex";
     messagePanier.style.justifyContent = "center";
 }
+
+let cleanFormMessages = () => {
+
+    let errors = document.querySelectorAll('.messageInfo');
+    if (errors) {
+        errors.forEach(err => err.remove());
+    }
+};
 
 function deleteProduct(products_from_api) {
     let deleteButton = document.getElementsByClassName("deleteItem");
