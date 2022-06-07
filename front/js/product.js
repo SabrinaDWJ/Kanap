@@ -47,11 +47,15 @@ function addBasket() {
         colors = document.getElementById("colors"),
         quantity = document.getElementById("quantity");
 
+
+    // Ecouter le bouton et envoyer le panier
+    button.addEventListener('click', () => {
+
         let cleanMessages = () => {
 
             let errors = document.querySelectorAll('.errorMessage');
             if (errors) {
-               errors.forEach(err => err.remove());
+                errors.forEach(err => err.remove());
             }
 
             let successAMessage = document.querySelector('.successMessage');
@@ -62,10 +66,6 @@ function addBasket() {
         };
 
         cleanMessages();
-    // Ecouter le bouton et envoyer le panier
-    button.addEventListener('click', () => {
-
-
         if (!isValid())
             return showErrorMessages();
 
@@ -108,7 +108,7 @@ function addBasket() {
 
 function isValid() {
     let colors = document.getElementById("colors");
-    
+
     if (colors.value == "")
         return false;
     if (quantity.value > 100 || quantity.value < 1)
