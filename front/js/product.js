@@ -49,7 +49,7 @@ function addBasket() {
 
         let cleanMessages = () => {
 
-            let errors = document.querySelectorAll(".errorMessage");
+            let errors = document.querySelectorAll('.errorMessage');
             if (errors) {
                errors.forEach(err => err.remove());
             }
