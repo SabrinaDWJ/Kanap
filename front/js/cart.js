@@ -199,9 +199,9 @@ function sendOrder() {
             return
         }
         if (charRegExp.test(inputFirstName.value) == false ||
-            charRegExp.test(inputLastName.value) == false || 
-            addressRegExp.test(inputAddress.value) == false || 
-            charRegExp.test(inputCity.value) == false || 
+            charRegExp.test(inputLastName.value) == false ||
+            addressRegExp.test(inputAddress.value) == false ||
+            charRegExp.test(inputCity.value) == false ||
             emailRegExp.test(inputEmail.value) == false) {
             createErrorForm("Veuillez bien remplir le formulaire!")
             console.log("Veuillez bien remplir le formulaire!")
